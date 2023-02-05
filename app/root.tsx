@@ -10,6 +10,10 @@ import {
 } from "@remix-run/react";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 import { getUser } from "./session.server";
 
 export const links: LinksFunction = () => {
@@ -35,7 +39,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full">
+      <body className="h-full" id="root">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

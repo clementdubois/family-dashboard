@@ -11,6 +11,8 @@ async function seed() {
     // no worries if it doesn't exist yet
   });
 
+  await prisma.errandItem.deleteMany();
+
   const hashedPassword = await bcrypt.hash("racheliscool", 10);
 
   const user = await prisma.user.create({
@@ -39,6 +41,14 @@ async function seed() {
       userId: user.id,
     },
   });
+
+  const errandItems = ["moutarde", "sel", "huile d'olive", "riz basmati"];
+
+  for (const index in errandItems) {
+    await prisma.errandItem.create({
+      data: { item: errandItems[index] },
+    });
+  }
 
   console.log(`Database has been seeded. 🌱`);
 }
