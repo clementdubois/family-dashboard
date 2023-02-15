@@ -8,3 +8,7 @@ export function getErrandsList() {
 export function addProduct({ item }: { item: ErrandItem["item"] }) {
   return prisma.errandItem.create({ data: { item } });
 }
+
+export function deleteProduct({ id }: { id: ErrandItem["id"] }) {
+  return prisma.errandItem.delete({ where: { id } });
+}

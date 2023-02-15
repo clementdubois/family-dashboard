@@ -4,24 +4,37 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   List,
   ListItem,
   TextField,
 } from "@mui/material";
 import { Form, useLoaderData } from "@remix-run/react";
-import { addProduct, getErrandsList } from "~/models/errands.server";
+import {
+  addProduct,
+  deleteProduct,
+  getErrandsList,
+} from "~/models/errands.server";
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useState } from "react";
+import { Delete } from "@mui/icons-material";
+import { red } from "@mui/material/colors";
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
-  const item = formData.get("item");
+  const commandName = formData.get("commandName");
 
-  if (typeof item !== "string") return json({}, { status: 400 });
-
-  await addProduct({ item });
-
+  switch (commandName) {
+    case "addItem":
+      const item = formData.get("item");
+      if (typeof item !== "string") return json({}, { status: 400 });
+      await addProduct({ item });
+    case "removeItem":
+      const id = formData.get("id");
+      if (typeof id !== "string") return json({}, { status: 400 });
+      await deleteProduct({ id });
+  }
   return redirect("");
 }
 
@@ -47,7 +60,21 @@ export default function Index() {
       <h2>Liste de course</h2>
       <List>
         {errandsList.map((item) => (
-          <ListItem key={item.id}>{item.item}</ListItem>
+          <Form method="post">
+            <input type="hidden" name="id" value={item.id} />
+            <ListItem key={item.id}>
+              <IconButton
+                aria-label="supprimer"
+                sx={{ color: red[500] }}
+                type="submit"
+                name="commandName"
+                value="removeItem"
+              >
+                <Delete />
+              </IconButton>
+              {item.item}
+            </ListItem>
+          </Form>
         ))}
       </List>
       <Button variant="contained" onClick={handleClickOpen}>
@@ -61,7 +88,12 @@ export default function Index() {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Annuler</Button>
-            <Button type="submit" onClick={handleClose}>
+            <Button
+              type="submit"
+              onClick={handleClose}
+              name="commandName"
+              value="addItem"
+            >
               Ajouter
             </Button>
           </DialogActions>
