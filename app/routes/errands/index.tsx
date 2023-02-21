@@ -1,5 +1,4 @@
-import { IconButton, List, ListItem, TextField } from "@mui/material";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Paper } from "@mui/material";
 import {
   addProduct,
   deleteProduct,
@@ -7,23 +6,39 @@ import {
 } from "~/models/errands.server";
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Add, Delete } from "@mui/icons-material";
-import { red } from "@mui/material/colors";
-import { useEffect, useRef } from "react";
+import { ProductList } from "~/components/errands/productList";
+import { AddProduct } from "~/components/errands/addProduct";
+import { ErrandTitle } from "~/components/errands/errandTitle";
+import invariant from "tiny-invariant";
+
+export enum ErrandsCommand {
+  AddItem = "addItem",
+  RemoveItem = "removeItem",
+}
+
+async function addItem(formData: FormData) {
+  const item = formData.get("item") as string;
+  invariant(item, "Un produit doit être renseigné");
+  await addProduct({ item });
+}
+
+async function removeItem(formData: FormData) {
+  const id = formData.get("id") as string;
+  invariant(id, "Un produit doit être sélectionné");
+  await deleteProduct({ id });
+}
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const commandName = formData.get("commandName");
 
   switch (commandName) {
-    case "addItem":
-      const item = formData.get("item");
-      if (typeof item !== "string") return json({}, { status: 400 });
-      await addProduct({ item });
-    case "removeItem":
-      const id = formData.get("id");
-      if (typeof id !== "string") return json({}, { status: 400 });
-      await deleteProduct({ id });
+    case ErrandsCommand.AddItem:
+      await addItem(formData);
+      break;
+    case ErrandsCommand.RemoveItem:
+      await removeItem(formData);
+      break;
   }
   return redirect("");
 }
@@ -34,52 +49,13 @@ export async function loader() {
 }
 
 export default function Index() {
-  const errandsList = useLoaderData<typeof loader>();
-  const addItemFormRef = useRef<HTMLFormElement>(null);
-  useEffect(() => {
-    addItemFormRef.current?.reset();
-  }, [errandsList]);
-
   return (
-    <section className="inline-flex flex-col bg-white p-4">
-      <h2>Liste de course</h2>
-      <Form ref={addItemFormRef} method="post">
-        <TextField
-          autoFocus
-          name="item"
-          label="Produit"
-          variant="standard"
-          size="small"
-        />
-        <IconButton
-          aria-label="Ajouter"
-          type="submit"
-          name="commandName"
-          value="addItem"
-          color="success"
-        >
-          <Add />
-        </IconButton>
-      </Form>
-      <List>
-        {errandsList.map((item) => (
-          <Form method="post" key={item.id}>
-            <input type="hidden" name="id" value={item.id} />
-            <ListItem>
-              <IconButton
-                aria-label="supprimer"
-                sx={{ color: red[500] }}
-                type="submit"
-                name="commandName"
-                value="removeItem"
-              >
-                <Delete />
-              </IconButton>
-              {item.item}
-            </ListItem>
-          </Form>
-        ))}
-      </List>
-    </section>
+    <Paper className="m-5 w-1/2 text-center">
+      <section className="bg-white p-4">
+        <ErrandTitle />
+        <AddProduct />
+        <ProductList />
+      </section>
+    </Paper>
   );
 }

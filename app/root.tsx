@@ -9,7 +9,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-import tailwindStylesheetUrl from "./styles/tailwind.css";
+import tailwindStylesheetUrl from "~/tailwind.css";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -39,7 +39,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full" id="root">
+      <body className="h-screen bg-gray-300" id="root">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
