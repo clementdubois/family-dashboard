@@ -9,7 +9,7 @@ export function ProductList() {
   const submitDelete = useSubmit();
   const errandsList = useLoaderData<typeof loader>();
   return (
-    <List className="grid grid grid-cols-4">
+    <List className="grid grid-cols-4">
       {errandsList.map((item, i) => (
         <Form
           method="post"
@@ -22,10 +22,10 @@ export function ProductList() {
             name="commandName"
             value={ErrandsCommand.RemoveItem}
           />
-          <ListItem>
+          <ListItem disablePadding className="py-2">
             <Chip
               label={item.item}
-              onDelete={(event) => submitDelete(deleteForms.current[i])}
+              onDelete={() => submitDelete(deleteForms.current[i])}
             />
           </ListItem>
         </Form>

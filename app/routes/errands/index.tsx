@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Divider, Paper } from "@mui/material";
 import {
   addProduct,
   deleteProduct,
@@ -50,9 +50,10 @@ export async function loader() {
 
 export default function Index() {
   return (
-    <Paper className="m-5 w-1/2 text-center">
+    <Paper className="m-5 mx-auto text-center md:w-1/2">
       <section className="bg-white p-4">
         <ErrandTitle />
+        <Divider />
         <AddProduct />
         <ProductList />
       </section>

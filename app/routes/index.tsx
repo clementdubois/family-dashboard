@@ -1,8 +1,8 @@
 /*
  * TODO :
- *  [] Refactorer le code pour bien séparer (delete, ajout...)
- *  [] Ajouter les invariant lors des actions
- *  [] Revoir le visuel pour que ça soit plus beau
+ *  [ x ] Refactorer le code pour bien séparer (delete, ajout...)
+ *  [ X ] Ajouter les invariant lors des actions
+ *  [ X ] Revoir le visuel pour que ça soit plus beau
  *  [] Trier les item ordre alphabétique
  *  [] Générer des icones automatiquement (via api)
  *  [] Envoit de la liste par sms ( via le share du téléphone)
