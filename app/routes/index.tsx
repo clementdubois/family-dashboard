@@ -17,6 +17,8 @@
  *  [] Swipe pour supprimer
  *  [] Différencier quantité de l'item
  *  [] Validation de formulaire ( useField, Zod)
+ *  [] Animation d'affichage
+ *  [] Catégoriser les produits
  *
  * */
 

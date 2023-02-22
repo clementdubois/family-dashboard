@@ -10,6 +10,7 @@ import { ProductList } from "~/components/errands/productList";
 import { AddProduct } from "~/components/errands/addProduct";
 import { ErrandTitle } from "~/components/errands/errandTitle";
 import invariant from "tiny-invariant";
+import { RecurringProducts } from "~/components/errands/RecurringProducts";
 
 export enum ErrandsCommand {
   AddItem = "addItem",
@@ -45,18 +46,36 @@ export async function action({ request }: ActionArgs) {
 
 export async function loader() {
   const errandsList = await getErrandsList();
-  return json(errandsList);
+  const recurringProducts = [
+    "sel",
+    "poivre",
+    "huile d'olive",
+    "pastille lave vaisselle",
+  ];
+
+  return json({ errandsList, recurringProducts });
+}
+
+function ErrandsList() {
+  return (
+    <section className="bg-white p-4">
+      <ErrandTitle />
+      <Divider />
+      <AddProduct />
+      <ProductList />
+    </section>
+  );
 }
 
 export default function Index() {
   return (
-    <Paper className="m-5 mx-auto text-center md:w-1/2">
-      <section className="bg-white p-4">
-        <ErrandTitle />
-        <Divider />
-        <AddProduct />
-        <ProductList />
-      </section>
-    </Paper>
+    <div className="flex flex-wrap">
+      <Paper className="m-5 mx-auto text-center md:w-1/2">
+        <ErrandsList />
+      </Paper>
+      <Paper className="m-5 mx-auto text-center ">
+        <RecurringProducts />
+      </Paper>
+    </div>
   );
 }

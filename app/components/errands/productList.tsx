@@ -7,7 +7,7 @@ import { ErrandsCommand } from "~/routes/errands";
 export function ProductList() {
   const deleteForms = useRef<Array<HTMLFormElement | null>>([]);
   const submitDelete = useSubmit();
-  const errandsList = useLoaderData<typeof loader>();
+  const errandsList = useLoaderData<typeof loader>().errandsList;
   return (
     <List className="grid grid-cols-4">
       {errandsList.map((item, i) => (
